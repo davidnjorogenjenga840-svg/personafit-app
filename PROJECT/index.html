@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonaFit AI - Complete Visual Lifestyle Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+</head>
+<body>
+
+    <div id="initialization-overlay">
+        <div class="onboarding-card active-step" id="step-card-1">
+            <div class="onboarding-progress-bar"><div class="onboarding-progress-fill" style="width: 33%"></div></div>
+            <h2>Initialize Profile Parameters</h2>
+            <p>Welcome to PersonaFit AI. Let's start building your biological ledger configuration from absolute zero.</p>
+            
+            <div class="universal-uploader" style="min-height:110px; padding:15px; margin-bottom:20px; border-color:var(--primary-purple);">
+                <input type="file" accept="image/*" onchange="processAvatarLoginUpload(this)">
+                <i class="fa-solid fa-user-plus" style="color:var(--primary-purple); font-size:22px; margin-bottom:6px;"></i>
+                <span id="avatarLoginText" style="font-size:13px; font-weight:600; color:#a39eff;">Add Profile Avatar Image</span>
+                <img id="avatarLoginPreview" style="width:60px; height:60px; border-radius:50%; object-fit:cover; display:none; margin-top:8px; border:2px solid var(--primary-purple);">
+            </div>
+
+            <div class="form-input-group">
+                <label>Profile Alias Name</label>
+                <input type="text" id="ob-name" placeholder="e.g. Maverick Spencer">
+            </div>
+            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="advanceOnboardingStep(2)">Proceed Next Step <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="onboarding-card" id="step-card-2">
+            <div class="onboarding-progress-bar"><div class="onboarding-progress-fill" style="width: 66%"></div></div>
+            <h2>Select Target Focus Vector</h2>
+            <p>This binds primary macro calculations directly onto your food and workout splits engines.</p>
+            <div class="option-matrix-grid">
+                <button class="matrix-option-btn selected" id="opt-lean" onclick="selectFocusVector('lean')">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Lean Shredding</span>
+                </button>
+                <button class="matrix-option-btn" id="opt-bulk" onclick="selectFocusVector('bulk')">
+                    <i class="fa-solid fa-cubes"></i>
+                    <span>Mass Hypertrophy</span>
+                </button>
+            </div>
+            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="advanceOnboardingStep(3)"> Calibrate Matrix <i class="fa-solid fa-circle-check"></i></button>
+        </div>
+
+        <div class="onboarding-card" id="step-card-3">
+            <div class="onboarding-progress-bar"><div class="onboarding-progress-fill" style="width: 100%"></div></div>
+            <h2 id="status-title">Configuring Ledger Assets</h2>
+            <p id="status-desc">Synchronizing database tables and downloading MobileNet computer vision models...</p>
+            <div class="loader-track"><div class="loader-fill-line" id="onboarding-loader"></div></div>
+        </div>
+    </div>
+
+    <header>
+        <a onclick="switchToView('home')" class="logo"><i class="fa-solid fa-heart-pulse"></i> PersonaFit <span>AI</span></a>
+        <nav>
+            <ul>
+                <li><a onclick="switchToView('home')" class="nav-link active" id="link-home">Home Workspace</a></li>
+                <li><a onclick="switchToView('food')" class="nav-link" id="link-food">Food AI</a></li>
+                <li><a onclick="switchToView('workout')" class="nav-link" id="link-workout">Workout AI</a></li>
+                <li><a onclick="switchToView('hair')" class="nav-link" id="link-hair">Hair Lookbook</a></li>
+                <li><a onclick="switchToView('outfit')" class="nav-link" id="link-outfit">Style Guide</a></li>
+            </ul>
+        </nav>
+        <button class="btn-portal" onclick="resetPlatformLedgerToZero()">
+            <img id="navAvatar" class="nav-avatar-circle" alt="User Avatar">
+            <span id="portalBtnText">Initializing...</span>
+        </button>
+    </header>
+
+    <main id="view-home" class="app-view active-view">
+        <section class="hero-container">
+            <div class="hero-left">
+                <div class="badge"><i class="fa-solid fa-microchip"></i> On-Device Vision Active</div>
+                <h1>AI-Powered<br>Personalized<br><span>Lifestyle for You</span></h1>
+                <p>Click tracking metrics rows to log daily updates. Your uploaded photos are evaluated by MobileNet to ensure category accuracy.</p>
+                <div class="cta-group">
+                    <button class="btn-primary" onclick="switchToView('food')">Open Analytics Panels <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-secondary" onclick="resetPlatformLedgerToZero()">Clear Live Cache</button>
+                </div>
+            </div>
+
+            <div class="dashboard-wrapper">
+                <div class="sidebar-mock">
+                    <div class="side-icon active" onclick="switchToView('home')"><i class="fa-solid fa-border-all"></i></div>
+                    <div class="side-icon" onclick="switchToView('food')"><i class="fa-solid fa-utensils"></i></div>
+                    <div class="side-icon" onclick="switchToView('workout')"><i class="fa-solid fa-dumbbell"></i></div>
+                    <div class="side-icon" onclick="switchToView('hair')"><i class="fa-solid fa-scissors"></i></div>
+                    <div class="side-icon" onclick="switchToView('outfit')"><i class="fa-solid fa-shirt"></i></div>
+                </div>
+
+                <div class="main-dashboard">
+                    <div class="dash-header">Your Active Telemetry Core 👋</div>
+                    <div class="metrics-grid">
+                        <div class="score-card">
+                            <h4>Health Index</h4>
+                            <div class="progress-ring-wrapper">
+                                <span id="healthScoreText">0%</span>
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="45" stroke="rgba(128,128,128,0.15)" stroke-width="8" fill="transparent"/>
+                                    <circle class="progress-ring-circle" id="healthRing" cx="50" cy="50" r="45" stroke-width="8" fill="transparent"/>
+                                </svg>
+                            </div>
+                            <div style="color:var(--accent-blue); font-size:12px; font-weight:600;">System Secure</div>
+                        </div>
+
+                        <div class="goals-card">
+                            <h4>Calibrate Daily Logs <small style="opacity:0.6; font-size:9px; color: var(--accent-blue);">(Click to add)</small></h4>
+                            <div class="goal-item" onclick="incrementMetric('steps', 1000, 10000)">
+                                <div class="goal-info"><span>Walking Volume</span><span id="stepsVal">0 / 10,000</span></div>
+                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="stepsBar" style="background: var(--accent-green);"></div></div>
+                            </div>
+                            <div class="goal-item" onclick="incrementMetric('water', 0.25, 2.0)">
+                                <div class="goal-info"><span>Hydration Target</span><span id="waterVal">0 / 2 L</span></div>
+                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="waterBar" style="background: var(--accent-blue);"></div></div>
+                            </div>
+                            <div class="goal-item" onclick="incrementMetric('workout', 5, 45)">
+                                <div class="goal-info"><span>Kinetic Strain Time</span><span id="workoutVal">0 / 45 min</span></div>
+                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="workoutBar" style="background: var(--primary-purple);"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendations-section">
+                        <h3>Redirect Directly To Specialized Analytics Panels</h3>
+                        <div class="rec-grid">
+                            <div class="rec-card" onclick="switchToView('food')">
+                                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=120&auto=format&fit=crop&q=60" alt="Food">
+                                <h5>Food Plan</h5><p>Dynamic Macros</p><span class="action-indicator">Redirect</span>
+                            </div>
+                            <div class="rec-card" onclick="switchToView('workout')">
+                                <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=120&auto=format&fit=crop&q=60" alt="Fitness">
+                                <h5>Workout Plan</h5><p>Routine Config</p><span class="action-indicator">Redirect</span>
+                            </div>
+                            <div class="rec-card" onclick="switchToView('hair')">
+                                <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=120&auto=format&fit=crop&q=60" alt="Hair">
+                                <h5>Hair Style</h5><p>Visage Scan</p><span class="action-indicator">Redirect</span>
+                            </div>
+                            <div class="rec-card" onclick="switchToView('outfit')">
+                                <img src="https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=120&auto=format&fit=crop&q=60" alt="Style">
+                                <h5>Outfit Ideas</h5><p>Palette Match</p><span class="action-indicator">Redirect</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <main id="view-food" class="app-view sub-dashboard-view">
+        <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
+        <div class="panel-header-block">
+            <h2>Nutritional Target & Food Analytics</h2>
+            <p>Upload meal images. The vision engine checks for ingredients or recipes before processing.</p>
+        </div>
+        <div class="workspace-layout-grid">
+            <div class="main-workspace-card">
+                <div class="universal-uploader">
+                    <div class="scanning-line" id="foodLaser"></div>
+                    <input type="file" accept="image/*" onchange="runVisionClassification(this, 'foodPreview', 'foodLaser', 'foodText', 'food')">
+                    <i class="fa-solid fa-camera-retro" style="font-size:28px; color:var(--accent-orange); margin-bottom:8px;"></i>
+                    <span id="foodText" style="font-weight:600;">Upload Meal Photo for Macro Scan</span>
+                    <img id="foodPreview" class="uploader-preview-img" alt="Food Breakdown Preview">
+                    <span id="foodTag" class="vision-meta-tag"></span>
+                </div>
+                <div class="goal-switch-row">
+                    <button class="switch-btn active" id="btn-diet-lean" onclick="toggleDietGoal('lean')">Lean Tissue Shred</button>
+                    <button class="switch-btn" id="btn-diet-bulk" onclick="toggleDietGoal('bulk')">Hypertrophy Surplus</button>
+                </div>
+                <div class="data-display-row">
+                    <div><i class="fa-solid fa-fire" style="color:var(--accent-orange)"></i><span>Target Energy Volume</span></div>
+                    <span class="tag-pill" id="tag-kcal" style="background:rgba(255,145,0,0.15); color:var(--accent-orange);">2,150 Kcal</span>
+                </div>
+                <div class="data-display-row">
+                    <div><i class="fa-solid fa-egg" style="color:var(--primary-purple)"></i><span>Optimal Target Protein</span></div>
+                    <span class="tag-pill" id="tag-protein" style="background:rgba(99,91,255,0.15); color:#a39eff;">140 Grams</span>
+                </div>
+            </div>
+            <div class="side-workspace-card">
+                <h4>Engine Computations</h4>
+                <p id="diet-insight-text" style="font-size: 14px; color: var(--text-muted);">Macro configuration thresholds are pacing efficiently.</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-workout" class="app-view sub-dashboard-view">
+        <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
+        <div class="panel-header-block">
+            <h2>Kinematic Conditioning & Workout Optimizer</h2>
+            <p>Filter macro routine components based on available physical workout tool configurations.</p>
+        </div>
+        <div class="workspace-layout-grid">
+            <div class="main-workspace-card">
+                <div class="goal-switch-row">
+                    <button class="switch-btn active" id="btn-equip-gym" onclick="toggleWorkoutEquipment('gym')">Full Gym Rig</button>
+                    <button class="switch-btn" id="btn-equip-home" onclick="toggleWorkoutEquipment('home')">Dumbbells Only</button>
+                </div>
+                <div id="workout-exercises-container"></div>
+            </div>
+            <div class="side-workspace-card">
+                <h4>Biomechanical Status</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Routine structures target functional balance paths cleanly.</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-hair" class="app-view sub-dashboard-view">
+        <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
+        <div class="panel-header-block">
+            <h2>Visage Topology & Hair Lookbook</h2>
+            <p>Initialize computer vision models to verify portrait orientation files.</p>
+        </div>
+        <div class="workspace-layout-grid">
+            <div class="main-workspace-card">
+                <div class="universal-uploader">
+                    <div class="scanning-line" id="hairLaser"></div>
+                    <input type="file" accept="image/*" onchange="runVisionClassification(this, 'hairPreview', 'hairLaser', 'hairText', 'hair')">
+                    <i class="fa-solid fa-scissors" style="font-size:28px; color:var(--primary-purple); margin-bottom:8px;"></i>
+                    <span id="hairText" style="font-weight:600;">Upload Headshot Photo for Symmetry Scan</span>
+                    <img id="hairPreview" class="uploader-preview-img" alt="Facial Mesh Result">
+                    <span id="hairTag" class="vision-meta-tag"></span>
+                </div>
+                <div class="gallery-preview-grid">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400&auto=format&fit=crop&q=80" alt="Crop">
+                        <div class="gallery-caption"><h5>Textured Mid Crop</h5><p>Offsets structural definition</p></div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1605497746444-ac9da5848ba7?w=400&auto=format&fit=crop&q=80" alt="Fade">
+                        <div class="gallery-caption"><h5>Precision Taper Blend</h5><p>Sharpens jaw silhouette lines</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="side-workspace-card">
+                <h4>Symmetry Metrics</h4>
+                <div class="data-display-row" style="margin:0;"><span>Topology Index:</span><strong style="color:var(--accent-green)">Geometric Ready</strong></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-outfit" class="app-view sub-dashboard-view">
+        <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
+        <div class="panel-header-block">
+            <h2>Chromatic Style Matching & Wardrobe Coordinates</h2>
+            <p>Upload a fashion photograph. The framework reads structural apparel styles.</p>
+        </div>
+        <div class="workspace-layout-grid">
+            <div class="main-workspace-card">
+                <div class="universal-uploader">
+                    <div class="scanning-line" id="outfitLaser"></div>
+                    <input type="file" accept="image/*" onchange="runVisionClassification(this, 'outfitPreview', 'outfitLaser', 'outfitText', 'outfit')">
+                    <i class="fa-solid fa-shirt" style="font-size:28px; color:var(--accent-pink); margin-bottom:8px;"></i>
+                    <span id="outfitText" style="font-weight:600;">Upload Fit-Pic Photo for Color Match</span>
+                    <img id="outfitPreview" class="uploader-preview-img" alt="Fit Check Breakdown">
+                    <span id="outfitTag" class="vision-meta-tag"></span>
+                </div>
+                <div class="gallery-preview-grid">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&auto=format&fit=crop&q=80" alt="Smart Casual">
+                        <div class="gallery-caption"><h5>Minimal Urban Tailoring</h5><p>Structured layers over neutral accents</p></div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&auto=format&fit=crop&q=80" alt="Capsule">
+                        <div class="gallery-caption"><h5>Monochrome Layering Matrix</h5><p>High contrast deep charcoal wardrobe elements</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="side-workspace-card">
+                <h4>Palette Vector Data</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Contrast properties optimize layering arrays seamlessly.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Trusted by elite development accelerators worldwide</p>
+        <div class="partner-logos"><span>Google for Startups</span><span>Microsoft Startups</span><span>NVIDIA Inception</span></div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="vision.js"></script>
+</body>
+</html>
