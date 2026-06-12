@@ -19,21 +19,37 @@
     <div id="initialization-overlay">
         <div class="onboarding-card active-step" id="step-card-1">
             <div class="onboarding-progress-bar"><div class="onboarding-progress-fill" style="width: 33%"></div></div>
-            <h2>Initialize Profile Parameters</h2>
-            <p>Welcome to PersonaFit AI. Let's start building your biological ledger configuration from absolute zero.</p>
+            <h2 id="auth-title">Initialize Profile Parameters</h2>
+            <p id="auth-desc">Welcome to PersonaFit AI. Let's start building your biological ledger configuration from absolute zero.</p>
             
-            <div class="universal-uploader" style="min-height:110px; padding:15px; margin-bottom:20px; border-color:var(--primary-purple);">
+            <div class="universal-uploader" id="avatar-upload-zone" style="min-height:110px; padding:15px; margin-bottom:20px; border-color:var(--primary-purple);">
                 <input type="file" accept="image/*" onchange="processAvatarLoginUpload(this)">
                 <i class="fa-solid fa-user-plus" style="color:var(--primary-purple); font-size:22px; margin-bottom:6px;"></i>
                 <span id="avatarLoginText" style="font-size:13px; font-weight:600; color:#a39eff;">Add Profile Avatar Image</span>
                 <img id="avatarLoginPreview" style="width:60px; height:60px; border-radius:50%; object-fit:cover; display:none; margin-top:8px; border:2px solid var(--primary-purple);">
             </div>
 
-            <div class="form-input-group">
+            <div class="form-input-group" id="group-username">
                 <label>Profile Alias Name</label>
                 <input type="text" id="ob-name" placeholder="e.g. Maverick Spencer">
             </div>
-            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="advanceOnboardingStep(2)">Proceed Next Step <i class="fa-solid fa-arrow-right"></i></button>
+
+            <div class="form-input-group">
+                <label>Security Keyhole Email</label>
+                <input type="email" id="auth-email" placeholder="name@example.com">
+            </div>
+
+            <div class="form-input-group">
+                <label>Access Credential Password</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+
+            <div style="margin-bottom: 15px; text-align: center; font-size: 13px;">
+                <span id="auth-toggle-msg">Already registered?</span> 
+                <a href="#" id="auth-toggle-link" onclick="toggleAuthMode()" style="color: var(--primary-purple); font-weight: 600; text-decoration: none;">Log In Instead</a>
+            </div>
+
+            <button class="btn-primary" id="btn-auth-submit" style="width:100%; justify-content:center;" onclick="handleAuthSubmit()">Proceed Next Step <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
         <div class="onboarding-card" id="step-card-2">
@@ -86,7 +102,7 @@
                 <p>Click tracking metrics rows to log daily updates. Your uploaded photos are evaluated by MobileNet to ensure category accuracy.</p>
                 <div class="cta-group">
                     <button class="btn-primary" onclick="switchToView('food')">Open Analytics Panels <i class="fa-solid fa-arrow-right"></i></button>
-                    <button class="btn-secondary" onclick="resetPlatformLedgerToZero()">Clear Live Cache</button>
+                    <button class="btn-secondary" onclick="resetPlatformLedgerToZero()">Log Out / Disconnect</button>
                 </div>
             </div>
 
@@ -286,6 +302,10 @@
         <p>Trusted by elite development accelerators worldwide</p>
         <div class="partner-logos"><span>Google for Startups</span><span>Microsoft Startups</span><span>NVIDIA Inception</span></div>
     </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script src="app.js"></script>
     <script src="vision.js"></script>

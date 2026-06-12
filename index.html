@@ -6,7 +6,7 @@
     <title>PersonaFit AI - Complete Visual Lifestyle Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="style.css">
@@ -17,23 +17,54 @@
 <body>
 
     <div id="initialization-overlay">
-        <div class="onboarding-card active-step" id="step-card-1">
-            <div class="onboarding-progress-bar"><div class="onboarding-progress-fill" style="width: 33%"></div></div>
-            <h2>Initialize Profile Parameters</h2>
-            <p>Welcome to PersonaFit AI. Let's start building your biological ledger configuration from absolute zero.</p>
+        <div class="onboarding-card active-step" id="step-auth-choice">
+            <h2>PersonaFit Vault Matrix</h2>
+            <p>Access your local biological ledger configuration network using secure cloud architecture.</p>
+            <div class="option-matrix-grid">
+                <button class="matrix-option-btn" onclick="showAuthForm('login')">
+                    <i class="fa-solid fa-key"></i>
+                    <span>User Login</span>
+                </button>
+                <button class="matrix-option-btn" onclick="showAuthForm('signup')">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Create Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="onboarding-card" id="step-auth-form">
+            <h2 id="auth-title">Create New Profile Ledger</h2>
+            <p id="auth-desc">Secure your biometric configurations with a local access key.</p>
             
-            <div class="universal-uploader" style="min-height:110px; padding:15px; margin-bottom:20px; border-color:var(--primary-purple);">
+            <div class="universal-uploader" id="avatar-upload-zone" style="min-height:100px; padding:10px; margin-bottom:15px; border-color:var(--primary-purple);">
                 <input type="file" accept="image/*" onchange="processAvatarLoginUpload(this)">
-                <i class="fa-solid fa-user-plus" style="color:var(--primary-purple); font-size:22px; margin-bottom:6px;"></i>
-                <span id="avatarLoginText" style="font-size:13px; font-weight:600; color:#a39eff;">Add Profile Avatar Image</span>
-                <img id="avatarLoginPreview" style="width:60px; height:60px; border-radius:50%; object-fit:cover; display:none; margin-top:8px; border:2px solid var(--primary-purple);">
+                <i class="fa-solid fa-camera" style="color:var(--primary-purple); font-size:20px; margin-bottom:4px;"></i>
+                <span id="avatarLoginText" style="font-size:12px; font-weight:600; color:#a39eff;">Add Profile Avatar</span>
+                <img id="avatarLoginPreview" style="width:55px; height:55px; border-radius:50%; object-fit:cover; display:none; margin-top:6px; border:2px solid var(--primary-purple);">
             </div>
 
-            <div class="form-input-group">
-                <label>Profile Alias Name</label>
-                <input type="text" id="ob-name" placeholder="e.g. Maverick Spencer">
+            <div class="form-input-group" id="group-username">
+                <label>Profile Identifier Name</label>
+                <input type="text" id="auth-username" placeholder="e.g. Maverick Spencer">
             </div>
-            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="advanceOnboardingStep(2)">Proceed Next Step <i class="fa-solid fa-arrow-right"></i></button>
+            <div class="form-input-group" id="group-email">
+                <label>Email Address</label>
+                <input type="email" id="auth-email" placeholder="name@example.com">
+            </div>
+            <div class="form-input-group" id="group-contact">
+                <label>Contact / Phone Number</label>
+                <input type="text" id="auth-contact" placeholder="e.g. +1 555-0199">
+            </div>
+            <div class="form-input-group">
+                <label>Security Access Code</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn-secondary" onclick="showAuthForm('choice')" style="padding:12px 20px;">Back</button>
+                <button class="btn-primary" id="btn-auth-submit" style="flex-grow:1; justify-content:center;" onclick="handleAuthSubmit()">Initialize Security Vector <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <p style="margin-top: 20px; font-size: 11px; opacity: 0.2; cursor: pointer; text-align: center; color: var(--text-muted);" onclick="toggleAdminPanel()">System Registry Log Access</p>
         </div>
 
         <div class="onboarding-card" id="step-card-2">
@@ -43,11 +74,11 @@
             <div class="option-matrix-grid">
                 <button class="matrix-option-btn selected" id="opt-lean" onclick="selectFocusVector('lean')">
                     <i class="fa-solid fa-bolt"></i>
-                    <span>Lean Shredding</span>
+                    <span>Lean Shredding (Loss Mode)</span>
                 </button>
                 <button class="matrix-option-btn" id="opt-bulk" onclick="selectFocusVector('bulk')">
                     <i class="fa-solid fa-cubes"></i>
-                    <span>Mass Hypertrophy</span>
+                    <span>Mass Hypertrophy (Gain Mode)</span>
                 </button>
             </div>
             <button class="btn-primary" style="width:100%; justify-content:center;" onclick="advanceOnboardingStep(3)"> Calibrate Matrix <i class="fa-solid fa-circle-check"></i></button>
@@ -58,6 +89,27 @@
             <h2 id="status-title">Configuring Ledger Assets</h2>
             <p id="status-desc">Synchronizing database tables and downloading MobileNet computer vision models...</p>
             <div class="loader-track"><div class="loader-fill-line" id="onboarding-loader"></div></div>
+        </div>
+
+        <div class="onboarding-card" id="admin-panel" style="display:none; max-width:850px; width:95%; max-height:80vh; overflow-y:auto; text-align:left; border: 1px solid var(--card-border); background: var(--bg-card);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+                <h2 style="margin:0; font-size:20px; color: white;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary-purple)"></i> Comprehensive Analysis History</h2>
+                <button class="btn-secondary" onclick="toggleAdminPanel()" style="padding:6px 14px; font-size:12px;">Close Panel</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; color:white; font-size:13px;">
+                    <thead>
+                        <tr style="border-bottom:2px solid var(--card-border); color:var(--text-muted); text-align:left;">
+                            <th style="padding:12px;">Telemetry Channel</th>
+                            <th style="padding:12px;">AI Extracted Labels</th>
+                            <th style="padding:12px;">Timestamp Sequence</th>
+                            <th style="padding:12px;">Network Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body">
+                        </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -74,19 +126,29 @@
         </nav>
         <button class="btn-portal" onclick="resetPlatformLedgerToZero()">
             <img id="navAvatar" class="nav-avatar-circle" alt="User Avatar">
-            <span id="portalBtnText">Initializing...</span>
+            <span id="portalBtnText">Initializing Core...</span>
         </button>
     </header>
 
     <main id="view-home" class="app-view active-view">
         <section class="hero-container">
             <div class="hero-left">
-                <div class="badge"><i class="fa-solid fa-microchip"></i> On-Device Vision Active</div>
+                <div class="badge"><i class="fa-solid fa-microchip"></i> On-Device Vision Engine Active</div>
                 <h1>AI-Powered<br>Personalized<br><span>Lifestyle for You</span></h1>
                 <p>Click tracking metrics rows to log daily updates. Your uploaded photos are evaluated by MobileNet to ensure category accuracy.</p>
+                
+                <div style="margin: 20px 0; background: rgba(255,255,255,0.03); border: 1px dashed var(--card-border); padding: 15px; border-radius: 8px;">
+                    <h5 style="margin: 0 0 10px 0; font-size:12px; text-transform: uppercase; letter-spacing:1px; color:#a39eff;">Quick Upload Scan Center</h5>
+                    <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                        <button class="btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="switchToView('food')"><i class="fa-solid fa-utensils" style="color:var(--accent-orange)"></i> Scan Meal</button>
+                        <button class="btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="switchToView('hair')"><i class="fa-solid fa-scissors" style="color:var(--primary-purple)"></i> Scan Hair</button>
+                        <button class="btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="switchToView('outfit')"><i class="fa-solid fa-shirt" style="color:var(--accent-pink)"></i> Scan Outfit</button>
+                    </div>
+                </div>
+
                 <div class="cta-group">
                     <button class="btn-primary" onclick="switchToView('food')">Open Analytics Panels <i class="fa-solid fa-arrow-right"></i></button>
-                    <button class="btn-secondary" onclick="resetPlatformLedgerToZero()">Clear Live Cache</button>
+                    <button class="btn-secondary" onclick="toggleAdminPanel()">Open Full History History</button>
                 </div>
             </div>
 
@@ -100,10 +162,26 @@
                 </div>
 
                 <div class="main-dashboard">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                        <div style="background: var(--bg-card); border: 1px solid var(--card-border); padding: 10px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Daily Streak</div>
+                            <div style="font-size: 18px; font-weight: 800; color: var(--accent-green);" id="streak-counter-ui">1 Day</div>
+                        </div>
+                        <div style="background: var(--bg-card); border: 1px solid var(--card-border); padding: 10px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Uploads</div>
+                            <div style="font-size: 18px; font-weight: 800; color: var(--accent-orange);" id="uploads-counter-ui">0</div>
+                        </div>
+                        <div style="background: var(--bg-card); border: 1px solid var(--card-border); padding: 10px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">AI Reports</div>
+                            <div style="font-size: 18px; font-weight: 800; color: var(--accent-pink);" id="reports-counter-ui">0</div>
+                        </div>
+                    </div>
+
                     <div class="dash-header">Your Active Telemetry Core 👋</div>
+                    
                     <div class="metrics-grid">
                         <div class="score-card">
-                            <h4>Health Index</h4>
+                            <h4>Health Score</h4>
                             <div class="progress-ring-wrapper">
                                 <span id="healthScoreText">0%</span>
                                 <svg width="100" height="100">
@@ -111,27 +189,63 @@
                                     <circle class="progress-ring-circle" id="healthRing" cx="50" cy="50" r="45" stroke-width="8" fill="transparent"/>
                                 </svg>
                             </div>
-                            <div style="color:var(--accent-blue); font-size:12px; font-weight:600;">System Secure</div>
+                            <div style="color:var(--accent-blue); font-size:12px; font-weight:600; margin-top:5px;">System Secure</div>
                         </div>
 
-                        <div class="goals-card">
-                            <h4>Calibrate Daily Logs <small style="opacity:0.6; font-size:9px; color: var(--accent-blue);">(Click to add)</small></h4>
-                            <div class="goal-item" onclick="incrementMetric('steps', 1000, 10000)">
-                                <div class="goal-info"><span>Walking Volume</span><span id="stepsVal">0 / 10,000</span></div>
-                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="stepsBar" style="background: var(--accent-green);"></div></div>
+                        <div class="score-card">
+                            <h4>Style Progress</h4>
+                            <div class="progress-ring-wrapper">
+                                <span id="styleScoreText">85%</span>
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="45" stroke="rgba(128,128,128,0.15)" stroke-width="8" fill="transparent"/>
+                                    <circle class="progress-ring-circle" id="styleRing" cx="50" cy="50" r="45" stroke-width="8" fill="transparent" stroke="var(--accent-pink)" stroke-dasharray="283" stroke-dashoffset="40"/>
+                                </svg>
                             </div>
-                            <div class="goal-item" onclick="incrementMetric('water', 0.25, 2.0)">
-                                <div class="goal-info"><span>Hydration Target</span><span id="waterVal">0 / 2 L</span></div>
-                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="waterBar" style="background: var(--accent-blue);"></div></div>
-                            </div>
-                            <div class="goal-item" onclick="incrementMetric('workout', 5, 45)">
-                                <div class="goal-info"><span>Kinetic Strain Time</span><span id="workoutVal">0 / 45 min</span></div>
-                                <div class="goal-bar-bg"><div class="goal-bar-fill" id="workoutBar" style="background: var(--primary-purple);"></div></div>
-                            </div>
+                            <div style="color:var(--accent-pink); font-size:12px; font-weight:600; margin-top:5px;">Palette Tuned</div>
                         </div>
                     </div>
 
-                    <div class="recommendations-section">
+                    <div class="goals-card" style="margin-top: 15px;">
+                        <h4>Calibrate Daily Biometrics <small style="opacity:0.6; font-size:9px; color: var(--accent-blue);">(Click rows to increment logs)</small></h4>
+                        <div class="goal-item" onclick="incrementMetric('steps', 1000, 10000)">
+                            <div class="goal-info"><span>Walking Volume (Daily Steps)</span><span id="stepsVal">0 / 10,000</span></div>
+                            <div class="goal-bar-bg"><div class="goal-bar-fill" id="stepsBar" style="background: var(--accent-green);"></div></div>
+                        </div>
+                        <div class="goal-item" onclick="incrementMetric('water', 0.25, 2.0)">
+                            <div class="goal-info"><span>Hydration Target (Water Intake)</span><span id="waterVal">0 / 2 L</span></div>
+                            <div class="goal-bar-bg"><div class="goal-bar-fill" id="waterBar" style="background: var(--accent-blue);"></div></div>
+                        </div>
+                        <div class="goal-item" onclick="incrementMetric('workout', 5, 45)">
+                            <div class="goal-info"><span>Kinetic Strain Time (Workout Minutes)</span><span id="workoutVal">0 / 45 min</span></div>
+                            <div class="goal-bar-bg"><div class="goal-bar-fill" id="workoutBar" style="background: var(--primary-purple);"></div></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px; background:var(--bg-card); border: 1px solid var(--card-border); padding: 15px; border-radius:8px;">
+                        <h4 style="margin:0 0 12px 0; font-size:14px; color:white;"><i class="fa-solid fa-trophy" style="color:var(--accent-orange)"></i> Unlocked Achievement Elements</h4>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;" id="achievements-display-container">
+                            <span class="tag-pill" style="background:rgba(255,145,0,0.1); color:var(--accent-orange); border:1px solid rgba(255,145,0,0.2); opacity: 0.4;"><i class="fa-solid fa-lock"></i> First Analysis</span>
+                            <span class="tag-pill" style="background:rgba(46,213,115,0.1); color:var(--accent-green); border:1px solid rgba(46,213,115,0.2); opacity: 0.4;"><i class="fa-solid fa-lock"></i> Healthy Eater</span>
+                            <span class="tag-pill" style="background:rgba(255,71,87,0.1); color:var(--accent-pink); border:1px solid rgba(255,71,87,0.2); opacity: 0.4;"><i class="fa-solid fa-lock"></i> Style Explorer</span>
+                            <span class="tag-pill" style="background:rgba(99,91,255,0.1); color:#a39eff; border:1px solid rgba(99,91,255,0.2); opacity: 0.4;"><i class="fa-solid fa-lock"></i> 7-Day Streak</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="background: var(--bg-card); border: 1px solid var(--card-border); padding: 15px; border-radius: 8px;">
+                            <h4 style="margin:0 0 10px 0; font-size:13px; color:white;"><i class="fa-solid fa-brain" style="color:var(--primary-purple)"></i> AI Coach: Daily Biometric Tips</h4>
+                            <ul style="margin:0; padding-left:15px; font-size:12px; color:var(--text-muted); line-height:1.6;">
+                                <li><strong>Nutrition Tip:</strong> Keep micro-nutrient values balanced during target shifts.</li>
+                                <li><strong>Fitness Tip:</strong> Unilateral control offsets minor spinal alignment issues.</li>
+                            </ul>
+                        </div>
+                        <div style="background: var(--bg-card); border: 1px solid var(--card-border); padding: 15px; border-radius: 8px;">
+                            <h4 style="margin:0 0 10px 0; font-size:13px; color:white;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent-pink)"></i> Personalized Core Advice</h4>
+                            <p id="dynamic-coach-advice" style="margin:0; font-size:12px; color:var(--text-muted); line-height:1.5;">Initialize a cloud telemetry profile run to trigger localized recommendations loops.</p>
+                        </div>
+                    </div>
+
+                    <div class="recommendations-section" style="margin-top:20px;">
                         <h3>Redirect Directly To Specialized Analytics Panels</h3>
                         <div class="rec-grid">
                             <div class="rec-card" onclick="switchToView('food')">
@@ -174,11 +288,11 @@
                     <span id="foodTag" class="vision-meta-tag"></span>
                 </div>
                 <div class="goal-switch-row">
-                    <button class="switch-btn active" id="btn-diet-lean" onclick="toggleDietGoal('lean')">Lean Tissue Shred</button>
-                    <button class="switch-btn" id="btn-diet-bulk" onclick="toggleDietGoal('bulk')">Hypertrophy Surplus</button>
+                    <button class="switch-btn active" id="btn-diet-lean" onclick="toggleDietGoal('lean')">Lean Tissue Shred (Weight Loss)</button>
+                    <button class="switch-btn" id="btn-diet-bulk" onclick="toggleDietGoal('bulk')">Hypertrophy Surplus (Muscle Gain)</button>
                 </div>
                 <div class="data-display-row">
-                    <div><i class="fa-solid fa-fire" style="color:var(--accent-orange)"></i><span>Target Energy Volume</span></div>
+                    <div><i class="fa-solid fa-fire" style="color:var(--accent-orange)"></i><span>Target Daily Calories</span></div>
                     <span class="tag-pill" id="tag-kcal" style="background:rgba(255,145,0,0.15); color:var(--accent-orange);">2,150 Kcal</span>
                 </div>
                 <div class="data-display-row">
@@ -187,7 +301,7 @@
                 </div>
             </div>
             <div class="side-workspace-card">
-                <h4>Engine Computations</h4>
+                <h4>Engine Computations & Insights</h4>
                 <p id="diet-insight-text" style="font-size: 14px; color: var(--text-muted);">Macro configuration thresholds are pacing efficiently.</p>
             </div>
         </div>
@@ -197,13 +311,13 @@
         <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
         <div class="panel-header-block">
             <h2>Kinematic Conditioning & Workout Optimizer</h2>
-            <p>Filter macro routine components based on available physical workout tool configurations.</p>
+            <p>Filter exercise routine lists based on available tool configurations.</p>
         </div>
         <div class="workspace-layout-grid">
             <div class="main-workspace-card">
                 <div class="goal-switch-row">
-                    <button class="switch-btn active" id="btn-equip-gym" onclick="toggleWorkoutEquipment('gym')">Full Gym Rig</button>
-                    <button class="switch-btn" id="btn-equip-home" onclick="toggleWorkoutEquipment('home')">Dumbbells Only</button>
+                    <button class="switch-btn active" id="btn-equip-gym" onclick="toggleWorkoutEquipment('gym')">Gym Workouts (Full Rig)</button>
+                    <button class="switch-btn" id="btn-equip-home" onclick="toggleWorkoutEquipment('home')">Home Workouts (Dumbbells Only)</button>
                 </div>
                 <div id="workout-exercises-container"></div>
             </div>
@@ -218,7 +332,7 @@
         <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
         <div class="panel-header-block">
             <h2>Visage Topology & Hair Lookbook</h2>
-            <p>Initialize computer vision models to verify portrait orientation files.</p>
+            <p>Initialize computer vision models to verify portrait orientation files and isolate hair lines.</p>
         </div>
         <div class="workspace-layout-grid">
             <div class="main-workspace-card">
@@ -226,7 +340,7 @@
                     <div class="scanning-line" id="hairLaser"></div>
                     <input type="file" accept="image/*" onchange="runVisionClassification(this, 'hairPreview', 'hairLaser', 'hairText', 'hair')">
                     <i class="fa-solid fa-scissors" style="font-size:28px; color:var(--primary-purple); margin-bottom:8px;"></i>
-                    <span id="hairText" style="font-weight:600;">Upload Headshot Photo for Symmetry Scan</span>
+                    <span id="hairText" style="font-weight:600;">Upload Headshot Photo for Face/Hair Detection</span>
                     <img id="hairPreview" class="uploader-preview-img" alt="Facial Mesh Result">
                     <span id="hairTag" class="vision-meta-tag"></span>
                 </div>
@@ -237,7 +351,7 @@
                     </div>
                     <div class="gallery-item">
                         <img src="https://images.unsplash.com/photo-1605497746444-ac9da5848ba7?w=400&auto=format&fit=crop&q=80" alt="Fade">
-                        <div class="gallery-caption"><h5>Precision Taper Blend</h5><p>Sharpens jaw silhouette lines</p></div>
+                        <div class="gallery-caption"><h5>Precision Taper Blend</h5><p>Hairstyle Recommendations</p></div>
                     </div>
                 </div>
             </div>
@@ -252,7 +366,7 @@
         <a onclick="switchToView('home')" class="back-nav-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Hub</a>
         <div class="panel-header-block">
             <h2>Chromatic Style Matching & Wardrobe Coordinates</h2>
-            <p>Upload a fashion photograph. The framework reads structural apparel styles.</p>
+            <p>Upload fashion photos. The framework processes clothing detection and style matrix components.</p>
         </div>
         <div class="workspace-layout-grid">
             <div class="main-workspace-card">
@@ -267,11 +381,11 @@
                 <div class="gallery-preview-grid">
                     <div class="gallery-item">
                         <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&auto=format&fit=crop&q=80" alt="Smart Casual">
-                        <div class="gallery-caption"><h5>Minimal Urban Tailoring</h5><p>Structured layers over neutral accents</p></div>
+                        <div class="gallery-caption"><h5>Minimal Urban Tailoring</h5><p>Style Recommendations Loaded</p></div>
                     </div>
                     <div class="gallery-item">
                         <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&auto=format&fit=crop&q=80" alt="Capsule">
-                        <div class="gallery-caption"><h5>Monochrome Layering Matrix</h5><p>High contrast deep charcoal wardrobe elements</p></div>
+                        <div class="gallery-caption"><h5>Monochrome Layering Matrix</h5><p>High contrast deep charcoal assets</p></div>
                     </div>
                 </div>
             </div>
@@ -286,6 +400,8 @@
         <p>Trusted by elite development accelerators worldwide</p>
         <div class="partner-logos"><span>Google for Startups</span><span>Microsoft Startups</span><span>NVIDIA Inception</span></div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="app.js"></script>
     <script src="vision.js"></script>

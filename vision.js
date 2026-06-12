@@ -68,6 +68,10 @@ async function runVisionClassification(inputNode, previewImgId, laserId, textId,
                 badgeTag.style.background = "rgba(255, 61, 0, 0.15)";
                 badgeTag.style.color = "var(--accent-red)";
                 badgeTag.style.display = 'inline-block';
+                saveAnalysis(
+    resolvedType,
+    classificationPredictions[0].className
+);
                 imagePreview.style.display = 'none';
                 inputNode.value = "";
             }
